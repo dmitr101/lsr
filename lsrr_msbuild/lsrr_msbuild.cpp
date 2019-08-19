@@ -1,21 +1,22 @@
-// lsrr_msbuild.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include "pch.h"
-#include <iostream>
+#include "image.h"
+
+image create_default_image()
+{
+    using namespace image_utils::common_colors;
+    image i{ 64, 64 };
+    i.clear(WHITE);
+    i.point(RED, { 15, 15 });
+    i.point(GREEN, { 47, 15 });
+    i.point(BLUE, { 31, 47 });
+
+    return std::move(i);
+}
 
 int main()
 {
-    std::cout << "Hello World!\n"; 
+    auto img = create_default_image();
+    image_utils::save_to_png(img, "test.png");
+
+    return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
