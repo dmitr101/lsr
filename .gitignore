@@ -263,3 +263,10 @@ __pycache__/
 
 # Cmake build
 [Bb]uild/
+
+# Conan cache
+conan.lock
+conaninfo.txt
+graph_info.json
+conanbuildinfo.*
+

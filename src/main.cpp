@@ -1,4 +1,5 @@
 #include "image.h"
+#include <fmt/format>
 
 image create_default_image()
 {
@@ -14,8 +15,11 @@ image create_default_image()
 
 int main()
 {
+    fmt::print("Begining render...");
+
     auto img = create_default_image();
     image_utils::save_to_png(img, "test.png");
 
+    fmt::print("Render finished.");
     return 0;
 }
