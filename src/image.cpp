@@ -16,9 +16,9 @@ namespace image_utils
 
         return stbi_write_png(
             file_name.data(),
-            img.width(),
-            img.height(),
-            std::tuple_size_v<image::pixel>,
+            static_cast<int>(img.width()),
+            static_cast<int>(img.height()),
+            static_cast<int>(std::tuple_size_v<image::pixel>),
             img.data_raw(),
             0) != 0;
     }
