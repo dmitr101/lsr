@@ -1,5 +1,5 @@
 #include "image.h"
-#include <fmt/format>
+#include <fmt/format.h>
 
 image create_default_image()
 {

@@ -1,5 +1,6 @@
 [requires]
 fmt/5.3.0@bincrafters/stable
+stb/20190512@conan/stable
 
 [generators]
 cmake

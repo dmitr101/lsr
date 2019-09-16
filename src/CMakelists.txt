@@ -1,8 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
 
-# include(stb)
-
 add_executable(lsr main.cpp image.h image.cpp)
-# target_link_libraries(lsr PRIVATE stb)
-message("Conan libs: " ${CONAN_LIBS} " .Include dirs: " ${CONAN_INCLUDE_DIRS})
-target_link_libraries(lsr PRIVATE ${CONAN_LIBS})
+target_link_libraries(lsr PRIVATE fmt)
+# Notice: STB is header only and is added by Conan to includes automatically
