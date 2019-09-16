@@ -31,10 +31,20 @@ image::image(size_t const width, size_t height) noexcept
     , width_(width)
     , height_(height) {}
 
-image::pixel_column_ref image::operator[](size_t x) noexcept
+image::pixel& image::at(pos const& p)
 {
+    auto const[x, y] = p;
     assert(x < width_);
-    return pixel_column_ref{ data_ , width_, height_, x };
+    assert(y < height_);
+    return data_[width_ * y + x];
+}
+
+image::pixel const& image::at(pos const& p) const
+{
+    auto const[x, y] = p;
+    assert(x < width_);
+    assert(y < height_);
+    return data_[width_ * y + x];
 }
 
 void image::clear(pixel const & color) noexcept
@@ -44,8 +54,7 @@ void image::clear(pixel const & color) noexcept
 
 void image::point(pixel const & color, pos const & pos) noexcept
 {
-    auto const[x, y] = pos;
-    (*this)[x][y] = color;
+    at(pos) = color;
 }
 
 void image::line(pixel const & color, pos const & from, pos const & to) noexcept
@@ -63,27 +72,4 @@ image::pixel_component const * image::data_raw() const noexcept
     return data_.empty()
         ? nullptr
         : reinterpret_cast<pixel_component const*>(data_.data());
-}
-
-//pixel_column_ref impl
-image::pixel_column_ref::pixel_column_ref(
-    data_container& data, 
-    size_t const width, 
-    size_t const height, 
-    size_t const column) noexcept
-    : data_(data)
-    , width_(width)
-    , height_(height)
-    , column_(column) {}
-
-image::pixel& image::pixel_column_ref::operator[](size_t y) noexcept
-{
-    assert(y < height_);
-    return data_[width_ * y + column_];
-}
-
-image::pixel const& image::pixel_column_ref::operator[](size_t y) const noexcept
-{
-    assert(y < height_);
-    return data_[width_ * y + column_];
 }

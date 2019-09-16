@@ -42,29 +42,11 @@ public:
     image(image&&) noexcept = default;
     image(image const&) noexcept = default;
 
-    class pixel_column_ref
-    {
-        friend image;
-        pixel_column_ref(
-            data_container& data, 
-            size_t const width, 
-            size_t const height, 
-            size_t const column) noexcept;
-
-    public:
-        pixel& operator[](size_t y) noexcept;
-        pixel const& operator[](size_t y) const noexcept;
-
-    private:
-        data_container& data_;
-        size_t const column_ = 0;
-        size_t const width_ = 0;
-        size_t const height_ = 0;
-    };
-
     size_t width() const { return width_; }
     size_t height() const { return height_; }
-    pixel_column_ref operator[](size_t x) noexcept;
+
+    pixel& at(pos const& p);
+    pixel const& at(pos const& p) const;
 
     void clear(pixel const& color) noexcept;
     void point(pixel const& color, pos const& pos) noexcept;
