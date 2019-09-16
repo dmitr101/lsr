@@ -4,6 +4,7 @@
 #include <tuple>
 #include <vector>
 #include <numeric>
+#include <string_view>
 
 class image;
 
