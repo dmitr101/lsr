@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.8)
+
+include(stb)
+
+add_executable(lsr main.cpp image.h image.cpp)
+target_link_libraries(lsr PRIVATE stb)

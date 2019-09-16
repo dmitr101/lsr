@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "image.h"
 
 image create_default_image()
