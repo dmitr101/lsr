@@ -1,6 +1,8 @@
 #include "image.h"
 
 #include <algorithm>
+#include <cmath>
+#include <cstdint>
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #define STBI_MSC_SECURE_CRT
@@ -21,6 +23,16 @@ namespace image_utils
             static_cast<int>(std::tuple_size_v<image::pixel>),
             img.data_raw(),
             0) != 0;
+    }
+}
+
+namespace
+{
+    template<typename T>
+    T sign(T num)
+    {
+        static_assert(std::is_floating_point_v<T> || std::is_signed_v<T>, "Only works with signed numbers!");
+        return num / abs(num);
     }
 }
 
@@ -59,7 +71,28 @@ void image::point(pixel const & color, pos const & pos) noexcept
 
 void image::line(pixel const & color, pos const & from, pos const & to) noexcept
 {
-    assert(false && "Not implemented yet!");
+    auto const h_range = static_cast<size_t>(abs(static_cast<int64_t>(from.first - to.first)));
+    auto const v_range = static_cast<size_t>(abs(static_cast<int64_t>(from.second - to.second)));
+    if(h_range > v_range)
+    {
+        auto const [left, right] = from.first < to.first ? pair{from , to} : pair{to, from};
+        auto const ratio = static_cast<double>(v_range) / h_range * sign(static_cast<double>(left.second - right.second));
+        for(auto x = left.first; x <= right.first; ++x)
+        {
+            auto const y = static_cast<size_t>(floorl(left.second + ratio * (x - left.first)));
+            point(color, {x, y});
+        }
+    }
+    else
+    {
+        auto const [up, bottom] = from.second < to.second ? pair{from , to} : pair{to, from};
+        auto const ratio = static_cast<float>(h_range) / v_range * sign(static_cast<double>(up.first - bottom.first));
+        for(auto y = up.second; y <= bottom.second; ++y)
+        {
+            auto const x = static_cast<size_t>(floorl(up.first + ratio * (y - up.second)));
+            point(color, {x, y});
+        }
+    }
 }
 
 image::data_container const & image::data() const noexcept
