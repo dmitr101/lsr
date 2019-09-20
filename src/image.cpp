@@ -28,15 +28,29 @@ namespace image_utils
 
 namespace
 {
-    template<typename T>
-    T sign(T num)
+    template<size_t MAIN_DIR, size_t SECONDARY_DIR>
+    void generic_line(image& target, image::pixel const& color, image::pos const& from, image::pos const& to, int64_t const main_range, int64_t const secondary_range)
     {
-        static_assert(std::is_floating_point_v<T> || std::is_signed_v<T>, "Only works with signed numbers!");
-        return num / abs(num);
+        auto const [start, end] = std::get<MAIN_DIR>(from) < std::get<MAIN_DIR>(to) ? std::pair{from , to} : std::pair{to, from};
+        auto const dir = secondary_range != 0 ? (secondary_range / abs(secondary_range)) : 0;
+        auto const derr = main_range != 0 ? abs(static_cast<double>(secondary_range) / main_range) : 0.0;
+        auto err = 0.0;
+        auto secondary_index = std::get<SECONDARY_DIR>(start);
+        for(auto main_index = std::get<MAIN_DIR>(start); main_index <= std::get<MAIN_DIR>(end); ++main_index)
+        {
+            image::pos next_point{};
+            std::get<MAIN_DIR>(next_point) = main_index;
+            std::get<SECONDARY_DIR>(next_point) = secondary_index;
+            target.point(color, next_point);
+            err += derr;
+            if(err >= 1.0)
+            {
+                secondary_index += dir;
+                err -= 1.0;
+            }
+        }
     }
 }
-
-using namespace std;
 
 image::image(size_t const width, size_t height) noexcept
     : data_(width * height)
@@ -71,27 +85,15 @@ void image::point(pixel const & color, pos const & pos) noexcept
 
 void image::line(pixel const & color, pos const & from, pos const & to) noexcept
 {
-    auto const h_range = static_cast<size_t>(abs(static_cast<int64_t>(from.first - to.first)));
-    auto const v_range = static_cast<size_t>(abs(static_cast<int64_t>(from.second - to.second)));
-    if(h_range > v_range)
+    auto const horizontal_range = static_cast<int64_t>(to.first - from.first);
+    auto const vertical_range = static_cast<int64_t>(to.second - from.second);
+    if(abs(horizontal_range) > abs(vertical_range))
     {
-        auto const [left, right] = from.first < to.first ? pair{from , to} : pair{to, from};
-        auto const ratio = static_cast<double>(v_range) / h_range * sign(static_cast<double>(left.second - right.second));
-        for(auto x = left.first; x <= right.first; ++x)
-        {
-            auto const y = static_cast<size_t>(floorl(left.second + ratio * (x - left.first)));
-            point(color, {x, y});
-        }
+        generic_line<0, 1>(*this, color, from, to, horizontal_range, vertical_range);
     }
     else
     {
-        auto const [up, bottom] = from.second < to.second ? pair{from , to} : pair{to, from};
-        auto const ratio = static_cast<float>(h_range) / v_range * sign(static_cast<double>(up.first - bottom.first));
-        for(auto y = up.second; y <= bottom.second; ++y)
-        {
-            auto const x = static_cast<size_t>(floorl(up.first + ratio * (y - up.second)));
-            point(color, {x, y});
-        }
+        generic_line<1, 0>(*this, color, from, to, vertical_range, horizontal_range);
     }
 }
 
