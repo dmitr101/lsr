@@ -29,9 +29,11 @@ namespace image_utils
 namespace
 {
     template<size_t MAIN_DIR, size_t SECONDARY_DIR>
-    void generic_line(image& target, image::pixel const& color, image::pos const& from, image::pos const& to, int64_t const main_range, int64_t const secondary_range)
+    void generic_line(image& target, image::pixel const& color, image::pos const& from, image::pos const& to)
     {
         auto const [start, end] = std::get<MAIN_DIR>(from) < std::get<MAIN_DIR>(to) ? std::pair{from , to} : std::pair{to, from};
+        auto const main_range = static_cast<int64_t>(std::get<MAIN_DIR>(end) - std::get<MAIN_DIR>(start));
+        auto const secondary_range = static_cast<int64_t>(std::get<SECONDARY_DIR>(end) - std::get<SECONDARY_DIR>(start));
         auto const dir = secondary_range != 0 ? (secondary_range / abs(secondary_range)) : 0;
         auto const derr = main_range != 0 ? abs(static_cast<double>(secondary_range) / main_range) : 0.0;
         auto err = 0.0;
@@ -89,11 +91,11 @@ void image::line(pixel const & color, pos const & from, pos const & to) noexcept
     auto const vertical_range = static_cast<int64_t>(to.second - from.second);
     if(abs(horizontal_range) > abs(vertical_range))
     {
-        generic_line<0, 1>(*this, color, from, to, horizontal_range, vertical_range);
+        generic_line<0, 1>(*this, color, from, to);
     }
     else
     {
-        generic_line<1, 0>(*this, color, from, to, vertical_range, horizontal_range);
+        generic_line<1, 0>(*this, color, from, to);
     }
 }
 
