@@ -18,9 +18,9 @@ namespace image_utils
     {
         static constexpr pixel BLACK = { 0, 0, 0 };
         static constexpr pixel WHITE = { PIXEL_MAX, PIXEL_MAX, PIXEL_MAX };
-        static constexpr pixel RED = { PIXEL_MAX, 0, 0 };
+        static constexpr pixel RED = { 0 , 0, PIXEL_MAX };
         static constexpr pixel GREEN = { 0, PIXEL_MAX, 0 };
-        static constexpr pixel BLUE = { 0, 0, PIXEL_MAX };
+        static constexpr pixel BLUE = { PIXEL_MAX, 0, 0 };
     }
 
     // Save image in png format. Function will check for file format extension.

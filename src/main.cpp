@@ -5,9 +5,9 @@ image create_default_image()
 {
     using namespace image_utils::common_colors;
     image i{ 64, 64 };
-    auto const p1 = image::pos{ 15, 15 };
-    auto const p2 = image::pos{ 47, 15 };
-    auto const p3 = image::pos{ 31, 47 };
+    auto const p1 = image::pos{ 0, 31 };
+    auto const p2 = image::pos{ 63, 31 };
+    auto const p3 = image::pos{ 31, 16 };
     i.clear(BLACK);
     i.line(RED, p1, p2);
     i.line(GREEN, p2, p3);
