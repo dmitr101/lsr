@@ -35,21 +35,25 @@ namespace
         auto const main_diff = static_cast<int64_t>(std::get<MAIN_DIR>(end) - std::get<MAIN_DIR>(start));
         auto const secondary_diff = static_cast<int64_t>(std::get<SECONDARY_DIR>(end) - std::get<SECONDARY_DIR>(start));
         auto const dir = secondary_diff != 0 ? (secondary_diff / abs(secondary_diff)) : 0;
-        auto const derr = main_diff != 0 ? abs(static_cast<double>(secondary_diff) / main_diff) : 0.0;
+        auto const derr = main_diff != 0 ? abs(secondary_diff) : 0;
 
         auto secondary_index = std::get<SECONDARY_DIR>(start);
-        auto err = 0.0;
+        auto err = int64_t{ 0 };
         for (auto main_index = std::get<MAIN_DIR>(start); main_index <= std::get<MAIN_DIR>(end); ++main_index)
         {
-            image::pos next_point{};
-            std::get<MAIN_DIR>(next_point) = main_index;
-            std::get<SECONDARY_DIR>(next_point) = secondary_index;
+            auto const next_point = [&]
+            {
+                auto result = image::pos{};
+                std::get<MAIN_DIR>(result) = main_index;
+                std::get<SECONDARY_DIR>(result) = secondary_index;
+                return result;
+            }();
             target.point(color, next_point);
             err += derr;
-            if(err >= 0.5)
+            if(err * 2 >= abs(main_diff))
             {
                 secondary_index += dir;
-                err -= 1.0;
+                err -= abs(main_diff);
             }
         }
     }
