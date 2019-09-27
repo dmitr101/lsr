@@ -4,6 +4,4 @@ add_executable(lsr main.cpp image.h image.cpp model.h model.cpp)
 target_link_libraries(lsr PRIVATE CONAN_PKG::stb)
 target_link_libraries(lsr PRIVATE CONAN_PKG::fmt)
 target_link_libraries(lsr PRIVATE CONAN_PKG::glm)
-
-find_package(assimp REQUIRED)
-target_link_libraries(lsr PRIVATE assimp)
+target_link_libraries(lsr PRIVATE CONAN_PKG::tinyobjloader)
