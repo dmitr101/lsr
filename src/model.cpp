@@ -64,3 +64,10 @@ model::model(std::vector<glm::vec3>&& vertices, std::vector<size_t>&& indices) n
     : vertices_(std::move(vertices))
     , indices_(std::move(indices)) {}
 
+model::face model::face_at(size_t i) const
+{
+    return { vertices_[indices_[i * face_vertix_number + 0]]
+            ,vertices_[indices_[i * face_vertix_number + 1]]
+            ,vertices_[indices_[i * face_vertix_number + 2]] };
+}
+
