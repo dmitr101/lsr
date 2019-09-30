@@ -12,7 +12,7 @@ namespace model_utils
     model load(std::string_view file_name) noexcept;
 }
 
-//Simple class representing polygonal meshes with 3 vertices per faces
+//Simple class representing polygonal meshes with 3 vertices per face
 class model final
 {
 public:
@@ -40,15 +40,15 @@ public:
 
             model::face operator*() const;
             model::face operator->() const;
-            face_iterator operator++() const;
-            face_iterator operator++(int) const;
+            face_iterator operator++();
+            face_iterator operator++(int);
 
             bool operator==(face_iterator const& other) const;
             bool operator!=(face_iterator const& other) const;
 
         private:
-            model const& parent;
-            size_t const index;
+            model const& parent_;
+            size_t index_;
     };
 
     face_iterator faces_begin() const { return face_iterator(*this, 0); }

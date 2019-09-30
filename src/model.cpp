@@ -71,3 +71,44 @@ model::face model::face_at(size_t i) const
             ,vertices_[indices_[i * face_vertix_number + 2]] };
 }
 
+model::face_iterator::face_iterator(model const& parent, size_t index)
+    : parent_(parent)
+    , index_(index) {}
+
+model::face_iterator::face_iterator(face_iterator const& other)
+    : parent_(other.parent_)
+    , index_(other.index_) {}
+
+model::face model::face_iterator::operator*() const
+{
+    return parent_.face_at(index_);
+}
+
+model::face model::face_iterator::operator->() const
+{
+    return parent_.face_at(index_);
+}
+
+model::face_iterator model::face_iterator::operator++()
+{
+    ++index_;
+    return *this;
+}
+
+model::face_iterator model::face_iterator::operator++(int)
+{
+    face_iterator tmp{ *this };
+    ++index_;
+    return tmp;
+}
+
+bool model::face_iterator::operator==(face_iterator const& other) const
+{
+    return &parent_ == &other.parent_
+        && index_ == other.index_;
+}
+
+bool model::face_iterator::operator!=(face_iterator const& other) const
+{
+    return !(*this == other);
+}
