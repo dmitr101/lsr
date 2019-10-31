@@ -1,4 +1,6 @@
 #include "image.h"
+#include "model.h"
+#include "render.h"
 #include <fmt/format.h>
 
 image create_default_image()
@@ -16,13 +18,24 @@ image create_default_image()
     return std::move(i);
 }
 
-int main()
+int main(int argc, char** argv)
 {
-    fmt::print("Beginning render... \n");
+	if(argc != 2)
+	{
+    		fmt::print("Wrong arguments! \n");
+		return -1;
+	}
 
-    auto img = create_default_image();
-    image_utils::save_to_png(img, "test.png");
+	fmt::print("Loading model from: {}", argv[1]);
+	model m = model_utils::load(argv[1]);	
 
-    fmt::print("Render finished.\n");
-    return 0;
+    	fmt::print("Beginning render... \n");
+
+	image target{512, 512};
+	target.clear(image_utils::common_colors::WHITE);
+	render::render_wireframe(m, target);
+	image_utils::save_to_png(target, "test.png");
+
+    	fmt::print("Render finished. Saved to test.png .\n");
+    	return 0;
 }

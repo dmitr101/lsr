@@ -112,3 +112,16 @@ bool model::face_iterator::operator!=(face_iterator const& other) const
 {
     return !(*this == other);
 }
+
+namespace std
+{
+	model::face_iterator begin(model const& m)
+	{
+		return m.faces_begin();
+	}
+
+	model::face_iterator end(model const& m)
+	{
+		return m.faces_end();
+	}
+}

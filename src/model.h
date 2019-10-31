@@ -1,3 +1,4 @@
+#pragma once
 #include <array>
 #include <vector>
 #include <string_view>
@@ -61,13 +62,6 @@ private:
 
 namespace std
 {
-    model::face_iterator begin(model const& m)
-    {
-        return m.faces_begin();
-    }
-
-    model::face_iterator end(model const& m)
-    {
-        return m.faces_end();
-    }
+    model::face_iterator begin(model const& m);
+    model::face_iterator end(model const& m);
 }

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 
-add_executable(lsr main.cpp image.h image.cpp model.h model.cpp)
+add_executable(lsr main.cpp image.h image.cpp model.h model.cpp render.h render.cpp)
 target_link_libraries(lsr PRIVATE CONAN_PKG::stb)
 target_link_libraries(lsr PRIVATE CONAN_PKG::fmt)
 target_link_libraries(lsr PRIVATE CONAN_PKG::glm)
