@@ -27,11 +27,21 @@ namespace
 			return range_max;
 		}
 	}
+
+	glm::vec4 extend_to_4(glm::vec3 const& v)
+	{
+		return {v.x, v.y, v.z, 1.0f};
+	}
+
+	glm::vec3 apply_transform(glm::vec3 const& point, glm::mat4x4 const& transform)
+	{
+		return glm::vec3(transform * extend_to_4(point));
+	}
 }
 
 namespace render
 {
-	void wireframe(model const& object, image_utils::pixel const& color, image& target)
+	void wireframe(model const& object, glm::mat4x4 const& transform, image_utils::pixel const& color, image& target)
 	{
 		auto const width = target.width();
 		auto const height = target.height();
@@ -39,8 +49,8 @@ namespace render
 		{
 			for(size_t i = 0; i < face.size(); ++i)
 			{
-				auto const& first_vertex = face[i];
-				auto const& second_vertex = face[(i + 1) % face.size()];
+				auto const& first_vertex = apply_transform(face[i], transform);
+				auto const& second_vertex = apply_transform(face[(i + 1) % face.size()], transform);
 				auto const x0 = static_cast<size_t>((first_vertex.x + 1.0f) * width / 2.0f);
 				auto const y0 = static_cast<size_t>((first_vertex.y + 1.0f) * height / 2.0f);
 				auto const x1 = static_cast<size_t>((second_vertex.x + 1.0f) * width / 2.0f);
