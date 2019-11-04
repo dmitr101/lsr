@@ -22,20 +22,20 @@ int main(int argc, char** argv)
 {
 	if(argc != 2)
 	{
-    		fmt::print("Wrong arguments! \n");
+    	fmt::print("Wrong arguments! \n");
 		return -1;
 	}
 
 	fmt::print("Loading model from: {}", argv[1]);
 	model m = model_utils::load(argv[1]);	
 
-    	fmt::print("Beginning render... \n");
+    fmt::print("Beginning render... \n");
 
 	image target{512, 512};
 	target.clear(image_utils::common_colors::WHITE);
-	render::render_wireframe(m, target);
+	render::wireframe(m, image_utils::common_colors::BLACK, target);
 	image_utils::save_to_png(target, "test.png");
 
-    	fmt::print("Render finished. Saved to test.png .\n");
-    	return 0;
+    fmt::print("Render finished. Saved to test.png .\n");
+    return 0;
 }

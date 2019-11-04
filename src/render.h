@@ -4,5 +4,5 @@
 
 namespace render
 {
-	void render_wireframe(model const& object, image& target);
+	void wireframe(model const& object, image_utils::pixel const& color, image& target);
 }
