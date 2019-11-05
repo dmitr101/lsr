@@ -48,11 +48,8 @@ public:
 
     pixel& at(pos const& p);
     pixel const& at(pos const& p) const;
-
-    void clear(pixel const& color) noexcept;
-    void point(pixel const& color, pos const& pos) noexcept;
-    void line(pixel const& color, pos const& from, pos const& to) noexcept;
     
+    data_container& data() noexcept;
     data_container const& data() const noexcept;
     pixel_component const* data_raw() const noexcept;
 
